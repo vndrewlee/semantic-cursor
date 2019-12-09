@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Semantic Cursor</title>
+    <meta name="description" content="Word2Vec Planchette" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style.css" />
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script
+      src="https://unpkg.com/ml5@0.4.3/dist/ml5.min.js"
+      type="text/javascript"
+    ></script>
+    <script src="/client.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>
+        Semantic Cursor
+      </h1>
+
+      <h2 id="target">Target: loading...</h2>
+    </header>
+
+    <main>
+      <table id="wordboard">
+        <tr>
+          <td class="nearbyWord"></td>
+          <td class="nearbyWord"></td>
+          <td class="nearbyWord"></td>
+        </tr>
+        <tr>
+          <td class="nearbyWord"></td>
+          <td id="cursor">loading...</td>
+          <td class="nearbyWord"></td>
+        </tr>
+        <tr>
+          <td class="nearbyWord"></td>
+          <td class="nearbyWord"></td>
+          <td class="nearbyWord"></td>
+        </tr>
+      </table>
+
+      <br />
+
+      <form>
+        <input
+          name="word"
+          type="text"
+          maxlength="100"
+          placeholder="Type where to go"
+          aria-labelledby="submit-word"
+        />
+        <button type="submit" id="submit-word">Submit Word</button>
+      </form>
+      <textarea class="scrollabletextbox" name="note" value="">
+flowers
+trunk
+lamp
+      </textarea>
+    </main>
+
+    <footer>
+      <a href="https://www.vndrewlee.com">vndrewlee.com</a>
+    </footer>
+  </body>
+</html>
