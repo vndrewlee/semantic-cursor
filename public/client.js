@@ -1,71 +1,83 @@
 const modelURL =
   "https://cdn.glitch.com/670bd0c3-4761-4b40-8adc-a36dee36c3cb%2Fwordvecs5000.json?v=1575425512135";
+const modelURLsm =
+  "https://cdn.glitch.com/670bd0c3-4761-4b40-8adc-a36dee36c3cb%2Fwordvecs1000.json?v=1575419642687";
+
 const dreamsForm = document.forms[0];
 const dreamInput = dreamsForm.elements["word"];
-const wordboard = document.getElementById("wordboard");
+const history = document.getElementById("history");
 const cursorEl = document.getElementById("cursor");
 const targetEl = document.getElementById("target");
-var cursorValue;
-var targetValue;
+const targetContext = document.getElementById("targetContext");
+
+var state = {};
 var nearValues = [];
 
 var socket = io();
 
-socket.on('connection', () => console.log('connected'));
-
-io.on('connection', socket => {
-  socket.on('chat message', function(msg){
-    console.log('message: ' + msg);
-  });
-});
-
-var word2Vec = ml5.word2vec(modelURL, onLoad);
+socket.on("state", data => checkState(data));
+var word2Vec = ml5.word2vec(modelURLsm, onLoad);
 
 function onLoad() {
-  setTarget();
-  setCursor();
+  fetch("/state")
+    .then(res => res.json())
+    .then(data => checkState(data));
 }
 
-function setTarget() {
-  word2Vec.getRandomWord().then(word => {
-    targetValue = word;
-    targetEl.textContent = "Target: " + targetValue;
+function checkState(data) {
+  
+  
+  if (!data.cursor) {
+    word2Vec.getRandomWord().then(word => socket.emit("newCursor", word));
+  }
+
+  if (!data.target) {
+    word2Vec.getRandomWord().then(word => socket.emit("newTarget", word));
+  }
+  
+  history.innerHTML = data.history.join(" ");
+
+  state = data;
+
+  renderCursor(state.cursor);
+  renderTarget(state.target);
+}
+
+function renderCursor(data) {
+  cursorEl.textContent = data;
+
+  word2Vec.nearest(data).then(results => {
+    nearValues = results.map(obj => obj.word);
+    console.log(nearValues);
+    [...document.getElementsByClassName("nearbyWord")].forEach((element, index) => {
+      element.innerHTML = nearValues[index];
+      if (state.history.includes(nearValues[index])) {
+        element.style.color = "#551A8B";  
+      } else {
+        element.style.color = "#0000EE";  
+      }
+    });
   });
 }
 
-function setCursor() {
-  word2Vec.getRandomWord().then(word => {
-    cursorValue = word;
-    cursorEl.textContent = cursorValue;
+function renderTarget(data) {
+  targetEl.textContent = "target word: \"" + data + "\"";
+  
+  
+  word2Vec.nearest(data).then(results => {
+    let nearTargets = results.map(obj => obj.word);
+    
+    targetContext.innerHTML = "As in: \"" + nearTargets.slice(0,5).join('\", \"') + '\"'
   });
 }
-
-// nearButton.mousePressed(() => {
-//   let word = nearWordInput.value();
-//   word2Vec.nearest(word, (err, result) => {
-//     let output = "";
-//     if (result) {
-//       for (let i = 0; i < result.length; i++) {
-//         output += result[i].word + "<br/>";
-//       }
-//     } else {
-//       output = "No word vector found";
-//     }
-//     nearResults.html(output);
-//   });
-// });
 
 // listen for the form to be submitted and add a new dream when it is
-dreamsForm.onsubmit = function(event) {
+dreamsForm.onsubmit = event => {
   // stop our form submission from refreshing the page
   event.preventDefault();
-
-  cursor.textContent = dreamInput.value;
+  socket.emit("newCursor", dreamInput.value);
 
   // reset form
   dreamInput.value = "";
   dreamInput.focus();
 };
-
-// wb = document.getElementById("wordboard")
-// wb.rows[0].cells[0].textContent = 'eyyyy'

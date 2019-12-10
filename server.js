@@ -1,49 +1,50 @@
-// // server.js
-// // where your node app starts
-
-// // init project
-// const express = require("express");
-// const app = express();
-
-// var server = require('http').Server(app);
-// var io = require('socket.io')(server);
-
-// var currentTarget = false;
-
-// app.use(express.static("public"));
-
-// // http://expressjs.com/en/starter/basic-routing.html
-// app.get("/", function(request, response) {
-//   response.sendFile(__dirname + "/views/index.html");
-// });
-
-// // listen for requests :)
-// const listener = app.listen(process.env.PORT, function() {
-//   console.log("Your app is listening on port " + listener.address().port);
-// });
-
-// io.on('connection', function(socket){
-//   console.log('new client');
-//   socket.emit('currentTarget', currentTarget);
-// });
-
 var express = require("express");
 var app = express();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
+const listener = http.listen(process.env.PORT);
+
 app.use(express.static("public"));
 
-var currentTarget = false;
+var state = {
+  target: false,
+  cursor: false,
+  history: []
+};
+
+var history = [];
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + "/views/index.html");
 });
 
-io.on('connection', function(socket){
-  console.log('a user connected');
-  socket.emit('currentTarget', currentTarget);
+app.get('/done', function(req, res){
+  res.sendFile(__dirname + "/views/done.html");
 });
 
-const listener = http.listen(process.env.PORT, function() {
-  console.log("Your app is listening on port " + listener.address().port);
+io.on('connection', socket => {
+  
+  console.log('a user connected');
+  
+  socket.on('newCursor', data => {
+    state.cursor = data;
+    state.history.push(data);
+    console.log(state);
+    io.emit('state', state);
+  });
+  
+  socket.on('newTarget', data => {
+    state.target = data;
+    console.log(state);
+    io.emit('state', state);
+  });
+  
+});
+
+app.get("/state", function(request, response) {
+  response.send(state);
+});
+
+app.get("/history", function(request, response) {
+  response.send({history: history});
 });
