@@ -16,7 +16,7 @@ var nearValues = [];
 var socket = io();
 
 socket.on("state", data => checkState(data));
-var word2Vec = ml5.word2vec(modelURL, onLoad);
+var word2Vec = ml5.word2vec(modelURLsm, onLoad);
 
 function onLoad() {
   fetch("/state")
