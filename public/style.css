@@ -2,12 +2,34 @@
 /* called by your view template */
 
 .blink {
-  animation: blinker 1s ease;
-/*   transition: width 2s ease, height 2s ease; */
+  animation: blinker 750ms linear;
 }
 
 @keyframes blinker {
-    50%  {background-color: red;}
+    0%  {background-color: white;}
+    25%  {background-color: Tomato;}
+    33%  {background-color: white;}
+    50%  {background-color: MediumSeaGreen;}
+    66%  {background-color: white;}
+    75%  {background-color: DodgerBlue;}
+    100% {background-color: grey;}
+}
+
+.hot {
+  animation: hotter 500ms ease;
+}
+
+@keyframes hotter {
+    50%  {background-color: Tomato;}
+    100% {background-color: grey;}
+}
+
+.cold {
+  animation: colder 500ms ease;
+}
+
+@keyframes colder {
+    50%  {background-color: PowderBlue;}
     100% {background-color: grey;}
 }
 
