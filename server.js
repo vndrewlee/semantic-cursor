@@ -53,3 +53,14 @@ app.get("/state", function(request, response) {
 app.get("/history", function(request, response) {
   response.send({ history: history });
 });
+
+app.get("/reset", function(request, response) {
+  
+  state = {
+    target: false,
+    cursor: false,
+    history: []
+  };
+  
+  io.emit("state", state);
+});
