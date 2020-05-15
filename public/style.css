@@ -1,0 +1,144 @@
+/* styles */
+/* called by your view template */
+
+.blink {
+  animation: blinker 750ms linear;
+}
+
+@keyframes blinker {
+    0%  {background-color: white;}
+    25%  {background-color: Tomato;}
+    33%  {background-color: white;}
+    50%  {background-color: MediumSeaGreen;}
+    66%  {background-color: white;}
+    75%  {background-color: DodgerBlue;}
+    100% {background-color: grey;}
+}
+
+.hot {
+  animation: hotter 500ms ease;
+}
+
+@keyframes hotter {
+    50%  {background-color: Tomato;}
+    100% {background-color: grey;}
+}
+
+.cold {
+  animation: colder 500ms ease;
+}
+
+@keyframes colder {
+    50%  {background-color: PowderBlue;}
+    100% {background-color: grey;}
+}
+
+body {
+  background-color: grey;
+}
+
+* {
+  box-sizing: border-box;
+  transition: background-color 250ms;
+}
+
+body {
+  font-family: helvetica, arial, sans-serif;
+  margin: 2em;
+}
+
+h1, h2 {
+  background-color: lightgrey;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+#cursor {
+  text-transform: capitalize;
+  color: grey;
+}
+
+#history {
+  text-transform: capitalize;
+  color: black;
+}
+
+p {
+  width: 100%;
+  word-break: normal;
+}
+
+form {
+  margin-bottom: 25px;
+  padding: 15px;
+/*   background-color: cyan; */
+  display: inline-block;
+  width: 100%;
+/*   max-width: 340px; */
+  border-radius: 3px;
+}
+
+input {
+  display: block;
+  margin-bottom: 10px;
+  padding: 5px;
+  width: 100%;
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+  font-size: 16px;
+}
+
+button {
+  font-size: 16px;
+  border-radius: 3px;
+  background-color: lightgrey;
+  border: 1px solid blue;
+  box-shadow: 2px 2px pink;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: yellow;
+}
+
+button:active {
+  box-shadow: none;
+}
+
+li {
+  margin-bottom: 5px;
+}
+
+footer {
+  margin-top: 50px;
+  padding-top: 25px;
+  border-top: 1px solid lightgrey;
+}
+
+table {
+  table-layout: fixed;
+}
+
+td {
+  width: 33%;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td {
+  height: 3em;
+  text-align: center;
+  background-color: lightgrey;
+}
+
+.cursor {
+  background-color: white;
+}
